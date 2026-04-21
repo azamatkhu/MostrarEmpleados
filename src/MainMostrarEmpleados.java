@@ -1,15 +1,30 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.sql.*;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+public class MainMostrarEmpleados {
+    public static void main(String[] args) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521:xe",
+                    "RIBERA",
+                    "ribera"
+            );
+
+            Statement statement = connection.createStatement();
+
+            String sql = "SELECT EMPLEADO.NOMBRE AS nombre, DEPARTAMENTO.NOMBRE AS nombre_dep\n" +
+                    "FROM EMPLEADO JOIN DEPARTAMENTO ON EMPLEADO.DEPARTAMENTO_ID = DEPARTAMENTO.ID\n" +
+                    "ORDER BY DEPARTAMENTO.NOMBRE";
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                String nombre = resultSet.getString("nombre");
+                String departamento = resultSet.getString("nombre_dep");
+                System.out.println(nombre + " " + departamento);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
